@@ -4,6 +4,8 @@ A Camera Application with Face Detection
 ## Requirements
 * PySimpleGUI
 * cv2
+* colorama
+
 ## App Layout
 ![APP Layout](https://github.com/JohnPaul2011/Camera-App-with-Face-Detection/assets/94855398/33b706d2-a742-4474-8722-56593812cb37)
 
