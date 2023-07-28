@@ -1,2 +1,2 @@
-# Camera-App-with-Face-Detection
+# Camera App with Face Detection
 A Camera Application with Face Detection
