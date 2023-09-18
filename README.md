@@ -20,5 +20,7 @@
 * More Graphics
 * More Modes
 * Load Imgaes
-
->Note: When Starting the Programme, It will automaticaly download a xml file([haarcascade_frontalface_default.xml](https://github.com/opencv/opencv/blob/4.x/data/haarcascades/haarcascade_frontalface_default.xml)). If file is not downloaded, you can directly download from [here!](https://github.com/opencv/opencv/blob/4.x/data/haarcascades/haarcascade_frontalface_default.xml)
+  
+>Note: When Starting the Programme, It will automaticaly download a xml file([haarcascade_frontalface_default.xml](https://github.com/opencv/opencv/blob/4.x/data/haarcascades/haarcascade_frontalface_default.xml)). If file is not downloaded, you can directly download from [here!](https://github.com/opencv/opencv/blob/4.x/data/haarcascades/haarcascade_frontalface_default.xml).
+>Note: If you want to change the modes, you have to start the programme once.
+>
