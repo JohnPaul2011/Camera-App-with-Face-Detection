@@ -8,6 +8,7 @@ import requests
 #      * Range
 #       * B'n'W
 #        * Pixelated
+#         * Blur
 
 a = False
 title = "Webcam - PySimpleGUI"
@@ -19,8 +20,9 @@ if os.listdir().count("config.json") == False:
     "Cam_W": 640,
     "Cam_H": 480,
     "Theme": "SystemDefaultForReal",
-    "Color_R": [25, 25, 230],
-    "Mode": "Normal"                 
+    "Color_G": [35, 230, 25],
+    "Mode": "Normal",
+    "Vision": "Normal"      
 }""")
 
 data = json.load(open("config.json"))
@@ -33,28 +35,31 @@ if os.listdir().count(xml) == False and data["Mode"] == "Normal":
             file.write(response.content)
     except Exception as e:
         print(Fore.RED+str(e)+Fore.RESET)
-        exit()
 
 color_green = data["Color_G"]
-
 font = cv2.FONT_HERSHEY_DUPLEX
+
 sg.theme(data["Theme"])
 camera_Width  = data["Cam_W"] # 480 # 640 # 1024 # 1280
-camera_Heigth = data["Cam_H"] # 320 # 480 # 780  # 960
+camera_Heigth = data["Cam_H"] # 320 # 480 # 780  # 930
 
-if data["Mode"] == "Normal":face_cascade = cv2.CascadeClassifier(xml)
+if data["Mode"] == "Normal" and os.listdir().count(xml):face_cascade = cv2.CascadeClassifier(xml)
 frameSize = (camera_Width, camera_Heigth)
 
 print(Fore.GREEN+Style.BRIGHT+"Camera Size: " + str((camera_Width, camera_Heigth)) + Fore.WHITE +Style.NORMAL)
 if data["Mode"] == "Normal":print(Fore.GREEN+Style.BRIGHT+"Cascade Classifier: " + str(xml) + Fore.WHITE + Style.NORMAL)
 
-cap = cv2.VideoCapture(0)
 
+if os.path.isfile(data["Vision"]): 
+    if data["Vision"].endswith(".mp4"):
+        cap = cv2.VideoCapture(data["Vision"])
+
+elif data["Vision"] == "Normal":cap = cv2.VideoCapture(0)
 def callback(value):
     pass
 
 def setup_trackbars():
-    cv2.namedWindow("Trackbars", 0)
+    cv2.namedWindow("Trackbars", 1)
 
     for i in ["MIN", "MAX"]:
         v = 0 if i == "MIN" else 255
@@ -70,14 +75,13 @@ def get_trackbar_values():
             values.append(v)
 
     return values
-sg.Text("Camera View", size=(60, 1)),sg.Image(filename="", key="cam1")
 
-menu1 = [[sg.Text("Camera View", size=(60, 1))],
+menu1 = [[sg.Text("Camera View")],
          [sg.Image(filename="", key="cam1")],
-        [sg.Button("Smile Pls",key="shot1")],
-        [sg.Button("Clear All Shots",key="shot_clear")]]
+         [sg.Button("Smile Pls",key="shot1",size=(100,0))],
+         [sg.Button("Clear All Shots",key="shot_clear",size=(100,0))]]
 
-layout = [[sg.Column(menu1,justification="center",expand_x=True)]]
+layout = [[sg.Column(menu1,element_justification="center")]]
 
 window = sg.Window(title, layout, 
                    no_titlebar=False)   
@@ -141,17 +145,20 @@ while True:
         v1_min, v2_min, v3_min, v1_max, v2_max, v3_max = get_trackbar_values()
         thresh = cv2.inRange(frame_to_thresh, (v1_min, v2_min, v3_min), (v1_max, v2_max, v3_max))
 
-    if data["Mode"] == "B'n'W":
+    if data["Mode"].count("B'n'W"):
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
     
-    if data["Mode"] == "Pixelated":
+    if data["Mode"].count("Pixelated"):
         hh,ww = data["Cam_H"],data["Cam_W"]
-        w,h =(90,90)
+        w,h =(130,130)
 
         result = cv2.resize(frame, (w,h), interpolation=cv2.INTER_AREA)
         frame = cv2.resize(result, (ww,hh), interpolation=cv2.INTER_AREA)
 
-    if data["Mode"] == "Normal":
+    if data["Mode"].count("Blur"):
+        frame = cv2.GaussianBlur(frame,(9,9),99999)
+
+    if data["Mode"] == "Normal" and os.listdir().count(xml):
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
     
         face_found = False
