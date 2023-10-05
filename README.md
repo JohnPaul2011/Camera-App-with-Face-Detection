@@ -14,6 +14,7 @@
 * HSV(Range)
 * Gray(B'n'W)
 * Pixelated
+* Blur
 
 ## In Future Updates🎉
 * Specified face detection
